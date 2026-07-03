@@ -6,7 +6,7 @@
 <title>Vacek Performance — Coaching Platform (demo)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
         --bg: #0a0b0a;
@@ -25,6 +25,7 @@
         --radius: 12px;
         --font-head: 'Space Grotesk', Verdana, sans-serif;
         --font-body: 'Barlow', Tahoma, sans-serif;
+        --font-cond: 'Barlow Condensed', 'Arial Narrow', sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -73,16 +74,29 @@
     h2 { font-size: 1.15rem; margin-bottom: 14px; }
     h2 .sub { color: var(--muted); font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
 
-    /* ---------- KPI ---------- */
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 26px; }
-    .kpi {
-        background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
-        padding: 16px 18px;
+    /* ---------- KPI stat strip ---------- */
+    .kpi-grid {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+        margin-bottom: 30px;
     }
-    .kpi .num { font-size: 1.7rem; font-weight: 800; }
-    .kpi .lbl { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+    .kpi { padding: 18px 22px; border-left: 1px solid var(--border); }
+    .kpi:first-child { border-left: 0; padding-left: 2px; }
+    .kpi .num { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .kpi .lbl { color: var(--muted); font-size: 0.76rem; margin-top: 3px; font-family: var(--font-cond); font-weight: 600; text-transform: uppercase; letter-spacing: 1.6px; }
     .kpi.warn .num { color: var(--red); }
     .kpi.ok .num { color: var(--green); }
+
+    /* ---------- interval profile (signature element) ---------- */
+    .profile { display: flex; align-items: flex-end; gap: 2px; }
+    .profile i { background: var(--accent); border-radius: 2px 2px 0 0; min-width: 3px; transform-origin: bottom; }
+    .hero .profile { height: 58px; margin-top: 18px; max-width: 560px; }
+    .hero .profile i { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+    @keyframes rise { from { transform: scaleY(0); } }
+    .wcard .profile { height: 20px; margin-top: 2px; }
+    .modal .profile { height: 42px; margin: 14px 0 4px; }
+    @media (prefers-reduced-motion: reduce) { .hero .profile i { animation: none; } }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     /* ---------- roster ---------- */
     .roster { display: flex; flex-direction: column; gap: 10px; }
@@ -116,7 +130,7 @@
     .athlete-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
     .athlete-head .meta { color: var(--muted); font-size: 0.8rem; }
     .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 16px; }
-    .day-col .day-lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; text-align: center; }
+    .day-col .day-lbl { font-family: var(--font-cond); font-weight: 600; font-size: 0.76rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.4px; margin-bottom: 6px; text-align: center; }
     .day-col .day-lbl b { display: block; color: var(--text); font-size: 0.85rem; }
     .day-col.today .day-lbl b { color: var(--accent); }
     .wcard {
@@ -151,8 +165,8 @@
         border: 1px solid var(--border); border-radius: var(--radius);
         padding: 24px; margin-bottom: 22px;
     }
-    .hero .eyebrow { color: var(--accent); font-size: 0.72rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
-    .hero h3 { font-size: 1.5rem; margin: 6px 0 4px; }
+    .hero .eyebrow { color: var(--accent); font-family: var(--font-cond); font-size: 0.82rem; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; }
+    .hero h3 { font-size: 1.9rem; letter-spacing: -0.02em; margin: 6px 0 4px; }
     .hero .desc { color: var(--muted); font-size: 0.88rem; max-width: 560px; }
     .steps { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; }
     .step {
@@ -217,6 +231,8 @@
 
     @media (max-width: 760px) {
         .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        .kpi:nth-child(odd) { border-left: 0; padding-left: 2px; }
+        .kpi:nth-child(n+3) { border-top: 1px solid var(--border); }
         .week-grid { grid-template-columns: repeat(2, 1fr); }
         .athlete-row { grid-template-columns: 1fr; gap: 8px; }
         .flags { justify-content: flex-start; }
@@ -354,6 +370,23 @@ const ATHLETES = [
 
 /* ---------- helpers ---------- */
 const fmtDate = d => d.slice(8,10).replace(/^0/,"") + "." + d.slice(5,7).replace(/^0/,"") + ".";
+
+/* Interval profile: šířka bloku = podíl na čase, výška + sytost = zóna */
+const Z_H = { 1: 32, 2: 50, 3: 70, 4: 92 };
+const Z_O = { 1: 0.32, 2: 0.52, 3: 0.76, 4: 1 };
+function zoneLevel(target) {
+    const m = [...(target || "").matchAll(/Z(\d)/gi)].map(x => +x[1]);
+    return m.length ? Math.max(...m) : 1;
+}
+function profileHTML(steps, animate) {
+    if (!steps || !steps.length) return "";
+    const mins = s => { const m = s[1].match(/(\d+)/); return m ? +m[1] : 5; };
+    const total = steps.reduce((t, s) => t + mins(s), 0);
+    return `<div class="profile" aria-hidden="true">` + steps.map((s, i) => {
+        const z = zoneLevel(s[2]);
+        return `<i style="width:${(100 * mins(s) / total).toFixed(1)}%;height:${Z_H[z]}%;opacity:${Z_O[z]}${animate ? `;animation-delay:${i * 90}ms` : ""}"></i>`;
+    }).join("") + `</div>`;
+}
 const nonRest = a => a.week.filter(x => x.type !== "rest");
 const doneCount = a => nonRest(a).filter(x => x.status === "done").length;
 const pastPlanned = a => nonRest(a).filter(x => x.date <= TODAY && x.status !== "synced" || x.status === "done" || x.status === "skipped").filter(x => x.date <= TODAY).length;
@@ -445,7 +478,7 @@ function workoutCardHTML(x, aid, idx) {
     <div class="wcard ${x.status}" onclick="openWorkout(${aid},${idx})">
         <div class="wtitle">${x.title}</div>
         <div class="wdur">${x.dur}${x.actual ? " · " + x.actual.km + " km" : ""}</div>
-        <div class="zbadges">${x.zones.map(z => `<span class="z ${z}">${z.toUpperCase()}</span>`).join("")}</div>
+        ${x.steps.length ? profileHTML(x.steps) : `<div class="zbadges">${x.zones.map(z => `<span class="z ${z}">${z.toUpperCase()}</span>`).join("")}</div>`}
         <div class="wstatus ${x.status}">${STATUS_LBL[x.status]}</div>
     </div>`;
 }
@@ -460,6 +493,7 @@ function athleteHTML() {
         <div class="eyebrow">Dnes · pátek 3. 7.</div>
         <h3>${today.title} · ${today.dur}</h3>
         <div class="desc">${today.desc}</div>
+        ${today.steps.length > 1 ? profileHTML(today.steps, true) : ""}
         ${today.steps.length ? `<div class="steps">${today.steps.map(s => `
             <div class="step"><span class="s-dur">${s[1]}</span><b>${s[0]}</b><span style="color:var(--muted);margin-left:auto">${s[2]}</span></div>`).join("")}</div>` : ""}
         <button class="garmin-btn" onclick="toast('Trénink je v Garmin Edge — stačí vyjet (demo)')">⌚ ${today.status === "synced" ? "V Garminu · připraveno" : "Odeslat do Garminu"}</button>
@@ -470,7 +504,7 @@ function athleteHTML() {
         <div class="wcard ${x.status}" style="cursor:default">
             <div class="wtitle">${fmtDate(x.date)} · ${x.title}</div>
             <div class="wdur">${x.dur}</div>
-            <div class="zbadges">${x.zones.map(z => `<span class="z ${z}">${z.toUpperCase()}</span>`).join("")}</div>
+            ${x.steps.length ? profileHTML(x.steps) : `<div class="zbadges">${x.zones.map(z => `<span class="z ${z}">${z.toUpperCase()}</span>`).join("")}</div>`}
             <div class="wstatus ${x.status}">${STATUS_LBL[x.status]}</div>
         </div>`).join("")}
     </div>
@@ -498,6 +532,7 @@ function openWorkout(aid, idx) {
     <h3>${x.title}</h3>
     <div class="m-meta">${a.name} · ${fmtDate(x.date)} · ${x.dur} · <span class="wstatus ${x.status}" style="display:inline">${STATUS_LBL[x.status]}</span></div>
     <p style="font-size:0.88rem; color:var(--muted)">${x.desc}</p>
+    ${x.steps.length > 1 ? profileHTML(x.steps) : ""}
     ${x.steps.length ? `<div class="steps">${x.steps.map(s => `
         <div class="step"><span class="s-dur">${s[1]}</span><b>${s[0]}</b><span style="color:var(--muted);margin-left:auto">${s[2]}</span></div>`).join("")}</div>` : ""}
     ${x.note ? `<p style="margin-top:12px;font-size:0.82rem;color:var(--orange)">📝 ${x.note}</p>` : ""}
