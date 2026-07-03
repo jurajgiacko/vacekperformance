@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vacek Performance — Coaching Platform (demo)</title>
+<style>
+    :root {
+        --bg: #0c0e11;
+        --panel: #14171c;
+        --panel2: #1a1e25;
+        --border: #262b34;
+        --text: #e8eaed;
+        --muted: #8b93a1;
+        --accent: #e10600;
+        --accent-soft: rgba(225, 6, 0, 0.12);
+        --green: #22c55e;
+        --orange: #f59e0b;
+        --red: #ef4444;
+        --blue: #3b82f6;
+        --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 15px;
+        line-height: 1.5;
+        min-height: 100vh;
+    }
+    a { color: inherit; }
+
+    /* ---------- top bar ---------- */
+    .topbar {
+        display: flex; align-items: center; gap: 16px;
+        padding: 14px 22px;
+        border-bottom: 1px solid var(--border);
+        background: var(--panel);
+        position: sticky; top: 0; z-index: 50;
+    }
+    .logo {
+        display: flex; align-items: center; gap: 10px;
+        font-weight: 800; letter-spacing: 0.5px; font-size: 1.05rem;
+    }
+    .logo-mark {
+        width: 34px; height: 34px; border-radius: 8px;
+        background: var(--accent);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 900; color: #fff; font-size: 0.9rem;
+    }
+    .logo small { display: block; font-weight: 500; color: var(--muted); font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; }
+    .view-switch {
+        margin-left: auto;
+        display: flex; background: var(--panel2); border: 1px solid var(--border);
+        border-radius: 999px; padding: 3px;
+    }
+    .view-switch button {
+        border: 0; background: transparent; color: var(--muted);
+        padding: 7px 18px; border-radius: 999px; cursor: pointer;
+        font-size: 0.85rem; font-weight: 600; font-family: inherit;
+    }
+    .view-switch button.active { background: var(--accent); color: #fff; }
+    .demo-badge {
+        font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+        color: var(--orange); border: 1px solid var(--orange);
+        padding: 2px 8px; border-radius: 999px; text-transform: uppercase;
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 26px 22px 80px; }
+    h2 { font-size: 1.15rem; margin-bottom: 14px; }
+    h2 .sub { color: var(--muted); font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
+
+    /* ---------- KPI ---------- */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 26px; }
+    .kpi {
+        background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 16px 18px;
+    }
+    .kpi .num { font-size: 1.7rem; font-weight: 800; }
+    .kpi .lbl { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+    .kpi.warn .num { color: var(--red); }
+    .kpi.ok .num { color: var(--green); }
+
+    /* ---------- roster ---------- */
+    .roster { display: flex; flex-direction: column; gap: 10px; }
+    .athlete-row {
+        display: grid;
+        grid-template-columns: minmax(160px, 1.4fr) 1fr 1.2fr auto;
+        gap: 14px; align-items: center;
+        background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 14px 18px; cursor: pointer; transition: border-color 0.15s;
+    }
+    .athlete-row:hover { border-color: var(--accent); }
+    .a-name { font-weight: 700; }
+    .a-name small { display: block; color: var(--muted); font-weight: 400; font-size: 0.75rem; }
+    .a-week { font-size: 0.8rem; color: var(--muted); }
+    .a-week b { color: var(--text); }
+    .bar { height: 6px; background: var(--panel2); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+    .bar i { display: block; height: 100%; border-radius: 999px; background: var(--green); }
+    .flags { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+    .flag {
+        font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+        white-space: nowrap;
+    }
+    .flag.red { background: rgba(239,68,68,0.14); color: var(--red); }
+    .flag.orange { background: rgba(245,158,11,0.14); color: var(--orange); }
+    .flag.green { background: rgba(34,197,94,0.14); color: var(--green); }
+    .flag.gray { background: var(--panel2); color: var(--muted); }
+
+    /* ---------- week calendar ---------- */
+    .back { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 0.85rem; padding: 0; margin-bottom: 14px; font-family: inherit; }
+    .back:hover { color: var(--text); }
+    .athlete-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+    .athlete-head .meta { color: var(--muted); font-size: 0.8rem; }
+    .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 16px; }
+    .day-col .day-lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; text-align: center; }
+    .day-col .day-lbl b { display: block; color: var(--text); font-size: 0.85rem; }
+    .day-col.today .day-lbl b { color: var(--accent); }
+    .wcard {
+        background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+        padding: 10px; font-size: 0.75rem; cursor: pointer; min-height: 86px;
+        display: flex; flex-direction: column; gap: 4px; transition: border-color 0.15s;
+    }
+    .wcard:hover { border-color: var(--accent); }
+    .wcard .wtitle { font-weight: 700; font-size: 0.78rem; line-height: 1.25; }
+    .wcard .wdur { color: var(--muted); }
+    .wcard.done { border-left: 3px solid var(--green); }
+    .wcard.skipped { border-left: 3px solid var(--red); opacity: 0.75; }
+    .wcard.synced { border-left: 3px solid var(--blue); }
+    .wcard.planned { border-left: 3px solid var(--border); }
+    .wcard.rest { opacity: 0.55; cursor: default; min-height: 60px; }
+    .wstatus { font-size: 0.66rem; font-weight: 700; margin-top: auto; }
+    .wstatus.done { color: var(--green); }
+    .wstatus.skipped { color: var(--red); }
+    .wstatus.synced { color: var(--blue); }
+    .wstatus.planned { color: var(--muted); }
+    .zbadges { display: flex; gap: 3px; flex-wrap: wrap; }
+    .z {
+        font-size: 0.62rem; font-weight: 800; padding: 1px 6px; border-radius: 4px;
+    }
+    .z.z1, .z.z2 { background: #14261a; color: var(--green); }
+    .z.z3 { background: #2a2413; color: var(--orange); }
+    .z.z4 { background: #2a1515; color: var(--red); }
+
+    /* ---------- athlete (client) view ---------- */
+    .hero {
+        background: linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+        border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 24px; margin-bottom: 22px;
+    }
+    .hero .eyebrow { color: var(--accent); font-size: 0.72rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+    .hero h3 { font-size: 1.5rem; margin: 6px 0 4px; }
+    .hero .desc { color: var(--muted); font-size: 0.88rem; max-width: 560px; }
+    .steps { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+    .step {
+        display: flex; gap: 12px; align-items: center;
+        background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+        padding: 9px 14px; font-size: 0.82rem;
+    }
+    .step .s-dur { color: var(--muted); min-width: 62px; font-variant-numeric: tabular-nums; }
+    .garmin-btn {
+        margin-top: 18px; display: inline-flex; align-items: center; gap: 8px;
+        background: var(--accent); color: #fff; border: 0; border-radius: 8px;
+        padding: 11px 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: inherit;
+    }
+    .garmin-btn:hover { filter: brightness(1.12); }
+    .garmin-btn.secondary { background: var(--panel2); border: 1px solid var(--border); color: var(--text); }
+    .strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+    .strip .wcard { min-width: 132px; flex-shrink: 0; }
+    .result-row {
+        display: grid; grid-template-columns: minmax(140px, 1.3fr) repeat(4, 1fr); gap: 10px;
+        background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+        padding: 12px 16px; font-size: 0.82rem; align-items: center; margin-bottom: 8px;
+    }
+    .result-row .r-name { font-weight: 700; }
+    .result-row .r-name small { display: block; color: var(--muted); font-weight: 400; }
+    .result-row .r-metric b { display: block; font-size: 0.95rem; }
+    .result-row .r-metric { color: var(--muted); font-size: 0.7rem; }
+
+    /* ---------- modal ---------- */
+    .overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+        display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .overlay.open { display: flex; }
+    .modal {
+        background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+        max-width: 520px; width: 100%; padding: 24px; max-height: 85vh; overflow-y: auto;
+    }
+    .modal h3 { margin-bottom: 2px; }
+    .modal .m-meta { color: var(--muted); font-size: 0.8rem; margin-bottom: 14px; }
+    .modal .close { float: right; background: none; border: 0; color: var(--muted); font-size: 1.3rem; cursor: pointer; font-family: inherit; }
+    .actual-box {
+        background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.3);
+        border-radius: 10px; padding: 14px; margin-top: 14px; font-size: 0.85rem;
+    }
+    .actual-box h4 { color: var(--green); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .actual-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .actual-grid b { display: block; font-size: 1.05rem; }
+    .actual-grid span { color: var(--muted); font-size: 0.7rem; }
+
+    /* ---------- toast ---------- */
+    .toast {
+        position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+        background: var(--panel2); border: 1px solid var(--green); color: var(--text);
+        padding: 12px 22px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+        opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 200;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .footer-note { margin-top: 40px; color: var(--muted); font-size: 0.72rem; text-align: center; }
+
+    @media (max-width: 760px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        .week-grid { grid-template-columns: repeat(2, 1fr); }
+        .athlete-row { grid-template-columns: 1fr; gap: 8px; }
+        .flags { justify-content: flex-start; }
+        .result-row { grid-template-columns: 1fr 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">
+        <div class="logo-mark" id="brandMark"></div>
+        <div><span id="brandName"></span><small id="brandTag"></small></div>
+    </div>
+    <span class="demo-badge">Demo · mock data</span>
+    <div class="view-switch">
+        <button id="btnCoach" onclick="setView('coach')">Trenér</button>
+        <button id="btnAthlete" onclick="setView('athlete')">Atlet</button>
+    </div>
+</div>
+
+<div class="wrap" id="app"></div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modalBody"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   WHITE-LABEL: celý brand platformy je jen konfigurace.
+   Jiný kouč = jiný BRAND objekt (+ vlastní doména).
+   ========================================================= */
+const BRAND = {
+    name: "Vacek Performance",
+    tagline: "Cycling coaching",
+    mark: "VP",
+    accent: "#e10600"
+};
+
+const TODAY = "2026-07-03"; // fixní "dnes" pro deterministické demo
+const DAYS = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"];
+const WEEK = ["2026-06-29","2026-06-30","2026-07-01","2026-07-02","2026-07-03","2026-07-04","2026-07-05"];
+
+/* ---------- mock tréninkové šablony (steps = co se pushne do Garminu) ---------- */
+const T = {
+    z2_90: { title: "Vytrvalost Z2", type: "bike", dur: "1:30", zones: ["z2"],
+        desc: "Klidná souvislá jízda v Z2. Kadence 85–95, rovina/mírné kopce.",
+        steps: [["Rozjetí", "10 min", "Z1"], ["Souvisle", "70 min", "Z2 · 85–95 rpm"], ["Vyjetí", "10 min", "Z1"]] },
+    sst_75: { title: "Sweet Spot 3×10", type: "bike", dur: "1:15", zones: ["z3"],
+        desc: "3× 10 min sweet spot (88–93 % FTP), mezi bloky 5 min Z1.",
+        steps: [["Rozjetí", "15 min", "Z1–Z2"], ["3× 10 min", "30 min", "Sweet Spot · Z3"], ["Pauzy 3× 5 min", "15 min", "Z1"], ["Vyjetí", "15 min", "Z1"]] },
+    vo2_60: { title: "VO2max 5×3", type: "bike", dur: "1:00", zones: ["z4"],
+        desc: "5× 3 min Z4/VO2, mezi intervaly 3 min volně. Jen když je čerstvost.",
+        steps: [["Rozjetí", "15 min", "Z1–Z2 + 3 sprinty"], ["5× 3 min", "15 min", "Z4"], ["Pauzy 5× 3 min", "15 min", "Z1"], ["Vyjetí", "15 min", "Z1"]] },
+    long_180: { title: "Long ride", type: "bike", dur: "3:00", zones: ["z2","z3"],
+        desc: "Dlouhá jízda Z2, posledních 30 min tempo Z3. Jíst každých 30 min.",
+        steps: [["Rozjetí", "15 min", "Z1"], ["Souvisle", "135 min", "Z2"], ["Finále", "30 min", "Z3 tempo"]] },
+    strength: { title: "Síla — core + nohy", type: "strength", dur: "40 min", zones: [],
+        desc: "Dřepy, výpady, plank, glute bridge. 3 kola.", steps: [] },
+    rest: { title: "Volno", type: "rest", dur: "—", zones: [], desc: "Regenerace.", steps: [] },
+    spin_45: { title: "Recovery spin", type: "bike", dur: "0:45", zones: ["z1"],
+        desc: "Úplně volné točení, kadence 90+, žádné kopce.",
+        steps: [["Volně", "45 min", "Z1 · 90+ rpm"]] }
+};
+
+function w(date, tmpl, status, actual, note) {
+    return { date, ...T[tmpl], status, actual: actual || null, note: note || null };
+}
+
+/* ---------- mock atleti ---------- */
+const ATHLETES = [
+    { id: 1, name: "Martin Dvořák", tag: "CEO · cíl: L'Etape CZ (srpen)", hrMax: 184, lastSync: "dnes 07:12",
+      week: [
+        w("2026-06-29","rest","done"),
+        w("2026-06-30","sst_75","done",{ km: 31.2, time: "1:16:40", avgHr: 148, maxHr: 171, elev: 210, te: 3.8 }),
+        w("2026-07-01","strength","done"),
+        w("2026-07-02","z2_90","done",{ km: 42.6, time: "1:32:15", avgHr: 136, maxHr: 158, elev: 285, te: 3.1 }),
+        w("2026-07-03","spin_45","synced"),
+        w("2026-07-04","long_180","synced"),
+        w("2026-07-05","rest","planned")
+      ]},
+    { id: 2, name: "Petra Nováková", tag: "CFO · hobby, 2. sezóna", hrMax: 176, lastSync: "dnes 06:40",
+      week: [
+        w("2026-06-29","z2_90","done",{ km: 38.1, time: "1:28:02", avgHr: 139, maxHr: 160, elev: 190, te: 3.0 }),
+        w("2026-06-30","rest","done"),
+        w("2026-07-01","sst_75","done",{ km: 29.4, time: "1:14:55", avgHr: 151, maxHr: 168, elev: 240, te: 3.9 }),
+        w("2026-07-02","rest","done"),
+        w("2026-07-03","z2_90","synced"),
+        w("2026-07-04","strength","planned"),
+        w("2026-07-05","long_180","synced")
+      ]},
+    { id: 3, name: "Jakub Svoboda", tag: "Founder · připravuje se na Ještěd 106", hrMax: 191, lastSync: "včera 19:05",
+      week: [
+        w("2026-06-29","strength","done"),
+        w("2026-06-30","vo2_60","done",{ km: 24.8, time: "1:01:12", avgHr: 162, maxHr: 189, elev: 180, te: 4.6 }, "Max HR 189 — intervaly přepálené, příště hlídat Z4 strop."),
+        w("2026-07-01","rest","done"),
+        w("2026-07-02","z2_90","skipped",null,"Služební cesta."),
+        w("2026-07-03","z2_90","planned"),
+        w("2026-07-04","long_180","synced"),
+        w("2026-07-05","rest","planned")
+      ]},
+    { id: 4, name: "Tomáš Malý", tag: "Manažer · začátečník", hrMax: 179, lastSync: "před 6 dny ⚠",
+      week: [
+        w("2026-06-29","spin_45","skipped"),
+        w("2026-06-30","rest","done"),
+        w("2026-07-01","z2_90","skipped",null,"Bez omluvy — napsat mu."),
+        w("2026-07-02","rest","done"),
+        w("2026-07-03","spin_45","planned"),
+        w("2026-07-04","z2_90","planned"),
+        w("2026-07-05","rest","planned")
+      ]},
+    { id: 5, name: "Lucie Králová", tag: "Advokátka · gran fondo Pálava finisher", hrMax: 182, lastSync: "dnes 08:01",
+      week: [
+        w("2026-06-29","rest","done"),
+        w("2026-06-30","z2_90","done",{ km: 40.3, time: "1:31:44", avgHr: 141, maxHr: 162, elev: 310, te: 3.2 }),
+        w("2026-07-01","strength","done"),
+        w("2026-07-02","sst_75","done",{ km: 30.6, time: "1:15:30", avgHr: 149, maxHr: 170, elev: 255, te: 4.0 }),
+        w("2026-07-03","rest","planned"),
+        w("2026-07-04","long_180","synced"),
+        w("2026-07-05","spin_45","synced")
+      ]},
+    { id: 6, name: "Ondřej Beneš", tag: "IT ředitel · návrat po nemoci", hrMax: 187, lastSync: "dnes 07:55",
+      week: [
+        w("2026-06-29","spin_45","done",{ km: 16.2, time: "0:46:10", avgHr: 118, maxHr: 134, elev: 60, te: 1.8 }),
+        w("2026-06-30","rest","done"),
+        w("2026-07-01","spin_45","done",{ km: 17.0, time: "0:45:20", avgHr: 121, maxHr: 139, elev: 75, te: 1.9 }),
+        w("2026-07-02","rest","done"),
+        w("2026-07-03","z2_90","synced"),
+        w("2026-07-04","rest","planned"),
+        w("2026-07-05","z2_90","planned")
+      ]}
+];
+
+/* ---------- helpers ---------- */
+const fmtDate = d => d.slice(8,10).replace(/^0/,"") + "." + d.slice(5,7).replace(/^0/,"") + ".";
+const nonRest = a => a.week.filter(x => x.type !== "rest");
+const doneCount = a => nonRest(a).filter(x => x.status === "done").length;
+const pastPlanned = a => nonRest(a).filter(x => x.date <= TODAY && x.status !== "synced" || x.status === "done" || x.status === "skipped").filter(x => x.date <= TODAY).length;
+function compliance(a) {
+    const past = nonRest(a).filter(x => x.date < TODAY);
+    if (!past.length) return 100;
+    return Math.round(100 * past.filter(x => x.status === "done").length / past.length);
+}
+function flagsFor(a) {
+    const f = [];
+    const skips = a.week.filter(x => x.status === "skipped").length;
+    if (skips >= 2) f.push(['red', skips + '× vynechaný trénink']);
+    else if (skips === 1) f.push(['orange', '1× vynecháno']);
+    if (a.lastSync.includes("⚠")) f.push(['red', 'bez syncu 6 dní']);
+    a.week.forEach(x => {
+        if (x.actual && x.actual.maxHr && x.actual.maxHr > a.hrMax * 0.97 && x.zones.includes("z4"))
+            f.push(['orange', 'HR nad zónou (' + fmtDate(x.date) + ')']);
+    });
+    if (!f.length) f.push(['green', 'vše OK']);
+    return f;
+}
+const STATUS_LBL = { done: "✅ Splněno", skipped: "✗ Vynecháno", synced: "⌚ V Garminu", planned: "· Naplánováno" };
+
+/* ---------- views ---------- */
+let view = "coach";
+let detailId = null;
+
+function setView(v) { view = v; detailId = null; render(); }
+
+function render() {
+    document.getElementById("btnCoach").classList.toggle("active", view === "coach");
+    document.getElementById("btnAthlete").classList.toggle("active", view === "athlete");
+    const app = document.getElementById("app");
+    if (view === "coach") app.innerHTML = detailId ? coachDetailHTML(detailId) : coachHTML();
+    else app.innerHTML = athleteHTML();
+}
+
+function coachHTML() {
+    const totalDone = ATHLETES.reduce((s,a) => s + doneCount(a), 0);
+    const avgComp = Math.round(ATHLETES.reduce((s,a) => s + compliance(a), 0) / ATHLETES.length);
+    const redFlags = ATHLETES.reduce((s,a) => s + flagsFor(a).filter(f => f[0] === 'red').length, 0);
+    return `
+    <div class="kpi-grid">
+        <div class="kpi"><div class="num">${ATHLETES.length}</div><div class="lbl">aktivních atletů</div></div>
+        <div class="kpi ${avgComp >= 80 ? 'ok' : ''}"><div class="num">${avgComp} %</div><div class="lbl">compliance tento týden</div></div>
+        <div class="kpi"><div class="num">${totalDone}</div><div class="lbl">splněných tréninků</div></div>
+        <div class="kpi ${redFlags ? 'warn' : 'ok'}"><div class="num">${redFlags}</div><div class="lbl">red flags k řešení</div></div>
+    </div>
+    <h2>Atleti <span class="sub">týden 29. 6. – 5. 7. · klikni pro detail</span></h2>
+    <div class="roster">
+        ${ATHLETES.map(a => `
+        <div class="athlete-row" onclick="openAthlete(${a.id})">
+            <div class="a-name">${a.name}<small>${a.tag}</small></div>
+            <div class="a-week"><b>${doneCount(a)}</b> / ${nonRest(a).length} tréninků
+                <div class="bar"><i style="width:${compliance(a)}%; background:${compliance(a) >= 80 ? 'var(--green)' : compliance(a) >= 50 ? 'var(--orange)' : 'var(--red)'}"></i></div>
+            </div>
+            <div class="a-week">Poslední sync: <b>${a.lastSync}</b></div>
+            <div class="flags">${flagsFor(a).map(f => `<span class="flag ${f[0]}">${f[1]}</span>`).join("")}</div>
+        </div>`).join("")}
+    </div>
+    <div class="footer-note">Demo s mock daty · V produkci: aktivity se párují automaticky z Garmin Connect API, tréninky se odesílají do zařízení atletů přes Garmin Training API.</div>`;
+}
+
+function coachDetailHTML(id) {
+    const a = ATHLETES.find(x => x.id === id);
+    return `
+    <button class="back" onclick="detailId=null;render()">← Zpět na přehled</button>
+    <div class="athlete-head">
+        <h2 style="margin:0">${a.name}</h2>
+        <span class="meta">${a.tag} · HRmax ${a.hrMax} · sync: ${a.lastSync}</span>
+    </div>
+    <div class="flags" style="justify-content:flex-start; margin-top:6px">${flagsFor(a).map(f => `<span class="flag ${f[0]}">${f[1]}</span>`).join("")}</div>
+    <div class="week-grid">
+        ${a.week.map((x, i) => `
+        <div class="day-col ${x.date === TODAY ? 'today' : ''}">
+            <div class="day-lbl">${DAYS[i]}<b>${fmtDate(x.date)}</b></div>
+            ${workoutCardHTML(x, a.id, i)}
+        </div>`).join("")}
+    </div>
+    <div style="margin-top:20px">
+        <button class="garmin-btn" onclick="toast('Týden odeslán do Garmin Connect kalendářů (demo)')">⌚ Odeslat celý týden do Garminu</button>
+        <button class="garmin-btn secondary" onclick="toast('V produkci: kopie minulého týdne / šablony bloků')">⧉ Naplánovat další týden</button>
+    </div>`;
+}
+
+function workoutCardHTML(x, aid, idx) {
+    if (x.type === "rest") return `<div class="wcard rest"><div class="wtitle">Volno</div></div>`;
+    return `
+    <div class="wcard ${x.status}" onclick="openWorkout(${aid},${idx})">
+        <div class="wtitle">${x.title}</div>
+        <div class="wdur">${x.dur}${x.actual ? " · " + x.actual.km + " km" : ""}</div>
+        <div class="zbadges">${x.zones.map(z => `<span class="z ${z}">${z.toUpperCase()}</span>`).join("")}</div>
+        <div class="wstatus ${x.status}">${STATUS_LBL[x.status]}</div>
+    </div>`;
+}
+
+function athleteHTML() {
+    const a = ATHLETES[0]; // demo: přihlášen Martin
+    const today = a.week.find(x => x.date === TODAY);
+    const upcoming = a.week.filter(x => x.date > TODAY);
+    const results = a.week.filter(x => x.actual);
+    return `
+    <div class="hero">
+        <div class="eyebrow">Dnes · pátek 3. 7.</div>
+        <h3>${today.title} · ${today.dur}</h3>
+        <div class="desc">${today.desc}</div>
+        ${today.steps.length ? `<div class="steps">${today.steps.map(s => `
+            <div class="step"><span class="s-dur">${s[1]}</span><b>${s[0]}</b><span style="color:var(--muted);margin-left:auto">${s[2]}</span></div>`).join("")}</div>` : ""}
+        <button class="garmin-btn" onclick="toast('Trénink je v Garmin Edge — stačí vyjet (demo)')">⌚ ${today.status === "synced" ? "V Garminu · připraveno" : "Odeslat do Garminu"}</button>
+    </div>
+    <h2>Zbytek týdne</h2>
+    <div class="strip">
+        ${upcoming.map(x => `
+        <div class="wcard ${x.status}" style="cursor:default">
+            <div class="wtitle">${fmtDate(x.date)} · ${x.title}</div>
+            <div class="wdur">${x.dur}</div>
+            <div class="zbadges">${x.zones.map(z => `<span class="z ${z}">${z.toUpperCase()}</span>`).join("")}</div>
+            <div class="wstatus ${x.status}">${STATUS_LBL[x.status]}</div>
+        </div>`).join("")}
+    </div>
+    <h2 style="margin-top:26px">Moje výsledky <span class="sub">automaticky z Garminu</span></h2>
+    ${results.map(x => `
+    <div class="result-row">
+        <div class="r-name">${x.title}<small>${fmtDate(x.date)} · ${x.actual.time}</small></div>
+        <div class="r-metric"><b>${x.actual.km} km</b>vzdálenost</div>
+        <div class="r-metric"><b>${x.actual.avgHr}</b>avg HR</div>
+        <div class="r-metric"><b>${x.actual.elev} m</b>převýšení</div>
+        <div class="r-metric"><b>${x.actual.te}</b>Training Effect</div>
+    </div>`).join("")}
+    <div class="footer-note">Žádné screenshoty. Dojedeš, Garmin se synchronizuje, trenér vidí výsledek.</div>`;
+}
+
+/* ---------- modal ---------- */
+function openAthlete(id) { detailId = id; render(); }
+
+function openWorkout(aid, idx) {
+    const a = ATHLETES.find(x => x.id === aid);
+    const x = a.week[idx];
+    const body = document.getElementById("modalBody");
+    body.innerHTML = `
+    <button class="close" onclick="closeModal()">×</button>
+    <h3>${x.title}</h3>
+    <div class="m-meta">${a.name} · ${fmtDate(x.date)} · ${x.dur} · <span class="wstatus ${x.status}" style="display:inline">${STATUS_LBL[x.status]}</span></div>
+    <p style="font-size:0.88rem; color:var(--muted)">${x.desc}</p>
+    ${x.steps.length ? `<div class="steps">${x.steps.map(s => `
+        <div class="step"><span class="s-dur">${s[1]}</span><b>${s[0]}</b><span style="color:var(--muted);margin-left:auto">${s[2]}</span></div>`).join("")}</div>` : ""}
+    ${x.note ? `<p style="margin-top:12px;font-size:0.82rem;color:var(--orange)">📝 ${x.note}</p>` : ""}
+    ${x.actual ? `
+    <div class="actual-box">
+        <h4>Realita z Garminu</h4>
+        <div class="actual-grid">
+            <div><b>${x.actual.km} km</b><span>vzdálenost</span></div>
+            <div><b>${x.actual.time}</b><span>čas</span></div>
+            <div><b>${x.actual.elev} m</b><span>převýšení</span></div>
+            <div><b>${x.actual.avgHr}</b><span>avg HR</span></div>
+            <div><b>${x.actual.maxHr}</b><span>max HR</span></div>
+            <div><b>${x.actual.te}</b><span>Training Effect</span></div>
+        </div>
+    </div>` : x.status !== "done" && x.type === "bike" ? `
+    <button class="garmin-btn" style="margin-top:16px" onclick="toast('Strukturovaný trénink odeslán do Garmin Connect (demo)')">⌚ Odeslat do Garminu</button>` : ""}`;
+    document.getElementById("overlay").classList.add("open");
+}
+function closeModal() { document.getElementById("overlay").classList.remove("open"); }
+
+/* ---------- toast + brand init ---------- */
+let toastTimer;
+function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = "✓ " + msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+document.documentElement.style.setProperty("--accent", BRAND.accent);
+document.getElementById("brandMark").textContent = BRAND.mark;
+document.getElementById("brandName").textContent = BRAND.name;
+document.getElementById("brandTag").textContent = BRAND.tagline;
+render();
+</script>
+</body>
+</html>
