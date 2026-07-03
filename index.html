@@ -4,31 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vacek Performance — Coaching Platform (demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
-        --bg: #0c0e11;
-        --panel: #14171c;
-        --panel2: #1a1e25;
-        --border: #262b34;
-        --text: #e8eaed;
-        --muted: #8b93a1;
-        --accent: #e10600;
-        --accent-soft: rgba(225, 6, 0, 0.12);
-        --green: #22c55e;
+        --bg: #0a0b0a;
+        --panel: #151816;
+        --panel2: #1f2321;
+        --border: #2b302d;
+        --text: #f2f2f2;
+        --muted: #838584;
+        --accent: #BAF931;
+        --accent-text: #0a0b0a;
+        --accent-soft: rgba(186, 249, 49, 0.12);
+        --green: #BAF931;
         --orange: #f59e0b;
         --red: #ef4444;
         --blue: #3b82f6;
         --radius: 12px;
+        --font-head: 'Space Grotesk', Verdana, sans-serif;
+        --font-body: 'Barlow', Tahoma, sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         background: var(--bg);
         color: var(--text);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 15px;
+        font-family: var(--font-body);
+        font-size: 15.5px;
         line-height: 1.5;
         min-height: 100vh;
     }
+    h2, h3, .kpi .num, .hero h3, .logo { font-family: var(--font-head); }
     a { color: inherit; }
 
     /* ---------- top bar ---------- */
@@ -40,16 +47,11 @@
         position: sticky; top: 0; z-index: 50;
     }
     .logo {
-        display: flex; align-items: center; gap: 10px;
-        font-weight: 800; letter-spacing: 0.5px; font-size: 1.05rem;
+        display: flex; align-items: center; gap: 14px;
     }
-    .logo-mark {
-        width: 34px; height: 34px; border-radius: 8px;
-        background: var(--accent);
-        display: flex; align-items: center; justify-content: center;
-        font-weight: 900; color: #fff; font-size: 0.9rem;
-    }
-    .logo small { display: block; font-weight: 500; color: var(--muted); font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; }
+    .logo img { height: 22px; display: block; }
+    .logo small { display: block; font-weight: 500; color: var(--muted); font-size: 0.66rem; letter-spacing: 1.6px; text-transform: uppercase; font-family: var(--font-body); white-space: nowrap; }
+    @media (max-width: 860px) { .logo small { display: none; } }
     .view-switch {
         margin-left: auto;
         display: flex; background: var(--panel2); border: 1px solid var(--border);
@@ -60,7 +62,7 @@
         padding: 7px 18px; border-radius: 999px; cursor: pointer;
         font-size: 0.85rem; font-weight: 600; font-family: inherit;
     }
-    .view-switch button.active { background: var(--accent); color: #fff; }
+    .view-switch button.active { background: var(--accent); color: var(--accent-text); }
     .demo-badge {
         font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
         color: var(--orange); border: 1px solid var(--orange);
@@ -105,7 +107,7 @@
     }
     .flag.red { background: rgba(239,68,68,0.14); color: var(--red); }
     .flag.orange { background: rgba(245,158,11,0.14); color: var(--orange); }
-    .flag.green { background: rgba(34,197,94,0.14); color: var(--green); }
+    .flag.green { background: var(--accent-soft); color: var(--green); }
     .flag.gray { background: var(--panel2); color: var(--muted); }
 
     /* ---------- week calendar ---------- */
@@ -139,7 +141,7 @@
     .z {
         font-size: 0.62rem; font-weight: 800; padding: 1px 6px; border-radius: 4px;
     }
-    .z.z1, .z.z2 { background: #14261a; color: var(--green); }
+    .z.z1, .z.z2 { background: #202a10; color: var(--green); }
     .z.z3 { background: #2a2413; color: var(--orange); }
     .z.z4 { background: #2a1515; color: var(--red); }
 
@@ -161,10 +163,11 @@
     .step .s-dur { color: var(--muted); min-width: 62px; font-variant-numeric: tabular-nums; }
     .garmin-btn {
         margin-top: 18px; display: inline-flex; align-items: center; gap: 8px;
-        background: var(--accent); color: #fff; border: 0; border-radius: 8px;
-        padding: 11px 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: inherit;
+        background: var(--accent); color: var(--accent-text); border: 0; border-radius: 999px;
+        padding: 11px 22px; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: inherit;
+        letter-spacing: 0.2px;
     }
-    .garmin-btn:hover { filter: brightness(1.12); }
+    .garmin-btn:hover { filter: brightness(1.08); }
     .garmin-btn.secondary { background: var(--panel2); border: 1px solid var(--border); color: var(--text); }
     .strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
     .strip .wcard { min-width: 132px; flex-shrink: 0; }
@@ -192,7 +195,7 @@
     .modal .m-meta { color: var(--muted); font-size: 0.8rem; margin-bottom: 14px; }
     .modal .close { float: right; background: none; border: 0; color: var(--muted); font-size: 1.3rem; cursor: pointer; font-family: inherit; }
     .actual-box {
-        background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.3);
+        background: rgba(186,249,49,0.07); border: 1px solid rgba(186,249,49,0.3);
         border-radius: 10px; padding: 14px; margin-top: 14px; font-size: 0.85rem;
     }
     .actual-box h4 { color: var(--green); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
@@ -225,8 +228,8 @@
 
 <div class="topbar">
     <div class="logo">
-        <div class="logo-mark" id="brandMark"></div>
-        <div><span id="brandName"></span><small id="brandTag"></small></div>
+        <img id="brandLogo" src="" alt="">
+        <small id="brandTag"></small>
     </div>
     <span class="demo-badge">Demo · mock data</span>
     <div class="view-switch">
@@ -249,9 +252,10 @@
    ========================================================= */
 const BRAND = {
     name: "Vacek Performance",
-    tagline: "Cycling coaching",
-    mark: "VP",
-    accent: "#e10600"
+    tagline: "Train in Silence, Win in Public",
+    logo: "assets/vp-logo.svg",
+    accent: "#BAF931",
+    accentText: "#0a0b0a"
 };
 
 const TODAY = "2026-07-03"; // fixní "dnes" pro deterministické demo
@@ -525,8 +529,10 @@ function toast(msg) {
 }
 
 document.documentElement.style.setProperty("--accent", BRAND.accent);
-document.getElementById("brandMark").textContent = BRAND.mark;
-document.getElementById("brandName").textContent = BRAND.name;
+document.documentElement.style.setProperty("--accent-text", BRAND.accentText);
+const logoEl = document.getElementById("brandLogo");
+logoEl.src = BRAND.logo;
+logoEl.alt = BRAND.name;
 document.getElementById("brandTag").textContent = BRAND.tagline;
 render();
 </script>
