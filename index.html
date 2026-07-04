@@ -68,7 +68,9 @@
         font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
         color: var(--orange); border: 1px solid var(--orange);
         padding: 2px 8px; border-radius: 999px; text-transform: uppercase;
+        white-space: nowrap;
     }
+    @media (max-width: 640px) { .demo-badge { display: none; } }
 
     .wrap { max-width: 1080px; margin: 0 auto; padding: 26px 22px 80px; }
     h2 { font-size: 1.15rem; margin-bottom: 14px; }
@@ -195,6 +197,98 @@
     .result-row .r-metric b { display: block; font-size: 0.95rem; }
     .result-row .r-metric { color: var(--muted); font-size: 0.7rem; }
 
+    /* ---------- compliance dots (vzor TP Home View) ---------- */
+    .dots { display: flex; gap: 5px; margin-top: 7px; }
+    .dot { width: 11px; height: 11px; border-radius: 999px; }
+    .dot.green { background: var(--green); }
+    .dot.yellow { background: var(--orange); opacity: 0.85; }
+    .dot.orange { background: #f97316; }
+    .dot.red { background: var(--red); }
+    .dot.pending { background: transparent; border: 1.5px solid var(--border); }
+    .dot.rest { width: 5px; height: 5px; margin: 3px 3px 0; background: var(--border); }
+
+    /* ---------- coach layout + activity feed ---------- */
+    .coach-cols { display: grid; grid-template-columns: 1.7fr 1fr; gap: 26px; align-items: start; }
+    .feed { display: flex; flex-direction: column; gap: 8px; }
+    .feed-item {
+        background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+        padding: 11px 14px; font-size: 0.82rem; cursor: pointer; transition: border-color 0.15s;
+        display: flex; gap: 10px;
+    }
+    .feed-item:hover { border-color: var(--accent); }
+    .feed-item.unread { border-left: 3px solid var(--accent); }
+    .avatar {
+        flex-shrink: 0; width: 30px; height: 30px; border-radius: 999px;
+        background: var(--panel2); border: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-cond); font-weight: 600; font-size: 0.72rem; color: var(--muted);
+    }
+    .feed-item .fi-meta { color: var(--muted); font-size: 0.7rem; margin-top: 2px; }
+    .feed-item .fi-text { color: var(--text); }
+    .cbadge { font-size: 0.7rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+    /* ---------- chat / poznámky k tréninku ---------- */
+    .chat { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+    .chat-title { font-family: var(--font-cond); font-weight: 600; font-size: 0.74rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted); }
+    .bubble { max-width: 88%; padding: 9px 13px; border-radius: 12px; font-size: 0.85rem; line-height: 1.45; }
+    .bubble .b-meta { font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
+    .bubble.a { align-self: flex-start; background: var(--panel2); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+    .bubble.c { align-self: flex-end; background: rgba(186,249,49,0.1); border: 1px solid rgba(186,249,49,0.25); border-bottom-right-radius: 3px; }
+    .chat-input { display: flex; gap: 8px; margin-top: 10px; }
+    .chat-input textarea {
+        flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+        color: var(--text); font-family: inherit; font-size: 0.85rem; padding: 9px 12px;
+        resize: none; min-height: 40px;
+    }
+    .chat-input button {
+        background: var(--accent); color: var(--accent-text); border: 0; border-radius: 999px;
+        padding: 0 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 0.85rem;
+    }
+
+    /* ---------- subjektivní feedback (feel + RPE) ---------- */
+    .fb-chips { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .fb-chip {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: var(--panel2); border: 1px solid var(--border); border-radius: 999px;
+        padding: 5px 13px; font-size: 0.8rem;
+    }
+    .fb-chip b { font-variant-numeric: tabular-nums; }
+    .fbform { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+    .feel-row { display: flex; gap: 8px; margin: 10px 0 14px; }
+    .feel-btn {
+        flex: 1; max-width: 74px; background: var(--panel2); border: 1px solid var(--border);
+        border-radius: 10px; padding: 9px 0 6px; cursor: pointer; text-align: center;
+        font-size: 1.25rem; font-family: inherit; transition: border-color 0.15s;
+    }
+    .feel-btn small { display: block; font-size: 0.58rem; color: var(--muted); margin-top: 3px; font-family: var(--font-cond); letter-spacing: 0.6px; text-transform: uppercase; }
+    .feel-btn.sel { border-color: var(--accent); background: var(--accent-soft); }
+    .rpe-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .rpe-row input[type=range] { flex: 1; accent-color: var(--accent); }
+    .rpe-val { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; min-width: 58px; font-variant-numeric: tabular-nums; }
+
+    /* ---------- wellness + load ---------- */
+    .wellness {
+        display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius);
+        background: var(--panel); margin-top: 16px; overflow: hidden;
+    }
+    .wcell { flex: 1; padding: 12px 16px; border-left: 1px solid var(--border); }
+    .wcell:first-child { border-left: 0; }
+    .wcell b { display: block; font-family: var(--font-head); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+    .wcell span { font-family: var(--font-cond); font-weight: 600; font-size: 0.66rem; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
+    .wcell.low b { color: var(--orange); }
+    .loadbars { display: flex; align-items: flex-end; gap: 6px; height: 46px; }
+    .loadbars i { flex: 1; background: var(--panel2); border: 1px solid var(--border); border-radius: 3px 3px 0 0; }
+    .loadbars i.cur { background: var(--accent-soft); border-color: var(--accent); }
+    .load-lbl { display: flex; gap: 6px; font-family: var(--font-cond); font-size: 0.64rem; color: var(--muted); letter-spacing: 0.8px; margin-top: 4px; }
+    .load-lbl span { flex: 1; text-align: center; }
+
+    /* ---------- privátní poznámka trenéra ---------- */
+    .private-note {
+        border: 1px dashed var(--border); border-radius: 10px; padding: 12px 15px;
+        font-size: 0.84rem; color: var(--text); margin-top: 14px; background: rgba(255,255,255,0.015);
+    }
+    .private-note .pn-lbl { font-family: var(--font-cond); font-weight: 600; font-size: 0.68rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+
     /* ---------- modal ---------- */
     .overlay {
         position: fixed; inset: 0; background: rgba(0,0,0,0.65);
@@ -237,6 +331,10 @@
         .athlete-row { grid-template-columns: 1fr; gap: 8px; }
         .flags { justify-content: flex-start; }
         .result-row { grid-template-columns: 1fr 1fr; }
+        .coach-cols { grid-template-columns: 1fr; }
+        .wellness { flex-wrap: wrap; }
+        .wcell { min-width: 40%; }
+        .feel-btn { max-width: none; }
     }
 </style>
 </head>
@@ -300,36 +398,60 @@ const T = {
         steps: [["Volně", "45 min", "Z1 · 90+ rpm"]] }
 };
 
-function w(date, tmpl, status, actual, note) {
-    return { date, ...T[tmpl], status, actual: actual || null, note: note || null };
+function w(date, tmpl, status, actual, note, fb) {
+    // fb = { rpe: 1-10, feel: 1-5, comments: [{who:'a'|'c', text, time, unread?}] }
+    return { date, ...T[tmpl], status, actual: actual || null, note: note || null,
+             rpe: fb?.rpe || null, feel: fb?.feel || null, comments: fb?.comments || [] };
 }
 
 /* ---------- mock atleti ---------- */
 const ATHLETES = [
     { id: 1, name: "Martin Dvořák", tag: "CEO · cíl: L'Etape CZ (srpen)", hrMax: 184, lastSync: "dnes 07:12",
+      wellness: { readiness: 82, sleep: "7:40", hrv: 58, rhr: 47 },
+      weeklyLoad: [4.2, 5.1, 3.8, 6.4],
+      privateNote: "Před L'Etape zvednout long ride na 3:30. Cestuje 14.–16. 7. — naplánovat lehčí blok.",
       week: [
         w("2026-06-29","rest","done"),
-        w("2026-06-30","sst_75","done",{ km: 31.2, time: "1:16:40", avgHr: 148, maxHr: 171, elev: 210, te: 3.8 }),
-        w("2026-07-01","strength","done"),
+        w("2026-06-30","sst_75","done",{ km: 31.2, time: "1:16:40", avgHr: 148, maxHr: 171, elev: 210, te: 3.8 }, null,
+          { rpe: 7, feel: 4, comments: [
+            { who: "a", text: "Poslední interval už bolel, ale dal jsem všechny tři v rozsahu.", time: "30. 6. 19:04" },
+            { who: "c", text: "Přesně tak to má vypadat. Ve čtvrtek jen klidná Z2, ať to vstřebáš.", time: "30. 6. 20:11" }
+          ]}),
+        w("2026-07-01","strength","done",null,null,{ feel: 3 }),
         w("2026-07-02","z2_90","done",{ km: 42.6, time: "1:32:15", avgHr: 136, maxHr: 158, elev: 285, te: 3.1 }),
         w("2026-07-03","spin_45","synced"),
         w("2026-07-04","long_180","synced"),
         w("2026-07-05","rest","planned")
       ]},
     { id: 2, name: "Petra Nováková", tag: "CFO · hobby, 2. sezóna", hrMax: 176, lastSync: "dnes 06:40",
+      wellness: { readiness: 74, sleep: "6:50", hrv: 44, rhr: 52 },
+      weeklyLoad: [3.0, 3.6, 4.0, 4.4],
+      privateNote: "",
       week: [
-        w("2026-06-29","z2_90","done",{ km: 38.1, time: "1:28:02", avgHr: 139, maxHr: 160, elev: 190, te: 3.0 }),
+        w("2026-06-29","z2_90","done",{ km: 38.1, time: "1:28:02", avgHr: 139, maxHr: 160, elev: 190, te: 3.0 }, null,
+          { rpe: 5, feel: 4 }),
         w("2026-06-30","rest","done"),
-        w("2026-07-01","sst_75","done",{ km: 29.4, time: "1:14:55", avgHr: 151, maxHr: 168, elev: 240, te: 3.9 }),
+        w("2026-07-01","sst_75","done",{ km: 29.4, time: "1:14:55", avgHr: 151, maxHr: 168, elev: 240, te: 3.9 }, null,
+          { rpe: 8, feel: 3, comments: [
+            { who: "a", text: "Druhý blok jsem musela zkrátit o 2 min, foukalo a nešlo držet watty.", time: "včera 21:18", unread: true }
+          ]}),
         w("2026-07-02","rest","done"),
         w("2026-07-03","z2_90","synced"),
         w("2026-07-04","strength","planned"),
         w("2026-07-05","long_180","synced")
       ]},
     { id: 3, name: "Jakub Svoboda", tag: "Founder · připravuje se na Ještěd 106", hrMax: 191, lastSync: "včera 19:05",
+      wellness: { readiness: 61, sleep: "5:55", hrv: 39, rhr: 55 },
+      weeklyLoad: [5.5, 6.2, 6.8, 3.1],
+      privateNote: "Má tendenci přepalovat intervaly. Držet zkrátka, dokud nesrovná spánek.",
       week: [
-        w("2026-06-29","strength","done"),
-        w("2026-06-30","vo2_60","done",{ km: 24.8, time: "1:01:12", avgHr: 162, maxHr: 189, elev: 180, te: 4.6 }, "Max HR 189 — intervaly přepálené, příště hlídat Z4 strop."),
+        w("2026-06-29","strength","done",null,null,{ feel: 4 }),
+        w("2026-06-30","vo2_60","done",{ km: 24.8, time: "1:01:12", avgHr: 162, maxHr: 189, elev: 180, te: 4.6 },
+          "Max HR 189 — intervaly přepálené, příště hlídat Z4 strop.",
+          { rpe: 9, feel: 2, comments: [
+            { who: "a", text: "Poslední dva intervaly jsem nedal celé, úplně mě to složilo.", time: "30. 6. 18:40", unread: true },
+            { who: "c", text: "Viděl jsem HR 189 — to nebylo Z4, to byl závod. Příště strop 175 a radši o interval míň.", time: "30. 6. 21:02" }
+          ]}),
         w("2026-07-01","rest","done"),
         w("2026-07-02","z2_90","skipped",null,"Služební cesta."),
         w("2026-07-03","z2_90","planned"),
@@ -337,30 +459,48 @@ const ATHLETES = [
         w("2026-07-05","rest","planned")
       ]},
     { id: 4, name: "Tomáš Malý", tag: "Manažer · začátečník", hrMax: 179, lastSync: "před 6 dny ⚠",
+      wellness: null,
+      weeklyLoad: [2.5, 1.8, 0.8, 0],
+      privateNote: "Motivace klesá třetí týden po sobě. Zavolat mu — nastavit menší, splnitelné dávky.",
       week: [
         w("2026-06-29","spin_45","skipped"),
         w("2026-06-30","rest","done"),
-        w("2026-07-01","z2_90","skipped",null,"Bez omluvy — napsat mu."),
+        w("2026-07-01","z2_90","skipped",null,null,
+          { comments: [ { who: "a", text: "Omlouvám se, zase mi to sežrala práce. O víkendu to doženu.", time: "1. 7. 22:15", unread: true } ]}),
         w("2026-07-02","rest","done"),
         w("2026-07-03","spin_45","planned"),
         w("2026-07-04","z2_90","planned"),
         w("2026-07-05","rest","planned")
       ]},
     { id: 5, name: "Lucie Králová", tag: "Advokátka · gran fondo Pálava finisher", hrMax: 182, lastSync: "dnes 08:01",
+      wellness: { readiness: 88, sleep: "8:05", hrv: 71, rhr: 49 },
+      weeklyLoad: [4.8, 5.0, 5.2, 5.6],
+      privateNote: "",
       week: [
         w("2026-06-29","rest","done"),
-        w("2026-06-30","z2_90","done",{ km: 40.3, time: "1:31:44", avgHr: 141, maxHr: 162, elev: 310, te: 3.2 }),
-        w("2026-07-01","strength","done"),
-        w("2026-07-02","sst_75","done",{ km: 30.6, time: "1:15:30", avgHr: 149, maxHr: 170, elev: 255, te: 4.0 }),
+        w("2026-06-30","z2_90","done",{ km: 40.3, time: "1:31:44", avgHr: 141, maxHr: 162, elev: 310, te: 3.2 }, null,
+          { rpe: 4, feel: 5 }),
+        w("2026-07-01","strength","done",null,null,{ feel: 4 }),
+        w("2026-07-02","sst_75","done",{ km: 30.6, time: "1:15:30", avgHr: 149, maxHr: 170, elev: 255, te: 4.0 }, null,
+          { rpe: 7, feel: 4, comments: [
+            { who: "a", text: "Nejlepší intervaly za sezónu, watty seděly celou dobu.", time: "2. 7. 17:50" }
+          ]}),
         w("2026-07-03","rest","planned"),
         w("2026-07-04","long_180","synced"),
         w("2026-07-05","spin_45","synced")
       ]},
     { id: 6, name: "Ondřej Beneš", tag: "IT ředitel · návrat po nemoci", hrMax: 187, lastSync: "dnes 07:55",
+      wellness: { readiness: 79, sleep: "7:20", hrv: 52, rhr: 50 },
+      weeklyLoad: [0, 0.8, 1.5, 2.6],
+      privateNote: "Návrat po angíně — 14 dní jen Z1/Z2, kontrola RHR každé ráno.",
       week: [
-        w("2026-06-29","spin_45","done",{ km: 16.2, time: "0:46:10", avgHr: 118, maxHr: 134, elev: 60, te: 1.8 }),
+        w("2026-06-29","spin_45","done",{ km: 16.2, time: "0:46:10", avgHr: 118, maxHr: 134, elev: 60, te: 1.8 }, null,
+          { rpe: 3, feel: 4, comments: [
+            { who: "a", text: "Cítím se o dost líp, tep konečně neskáče.", time: "29. 6. 17:22" }
+          ]}),
         w("2026-06-30","rest","done"),
-        w("2026-07-01","spin_45","done",{ km: 17.0, time: "0:45:20", avgHr: 121, maxHr: 139, elev: 75, te: 1.9 }),
+        w("2026-07-01","spin_45","done",{ km: 17.0, time: "0:45:20", avgHr: 121, maxHr: 139, elev: 75, te: 1.9 }, null,
+          { rpe: 3, feel: 4 }),
         w("2026-07-02","rest","done"),
         w("2026-07-03","z2_90","synced"),
         w("2026-07-04","rest","planned"),
@@ -410,6 +550,42 @@ function flagsFor(a) {
 }
 const STATUS_LBL = { done: "✅ Splněno", skipped: "✗ Vynecháno", synced: "⌚ V Garminu", planned: "· Naplánováno" };
 
+/* Subjektivní zpětná vazba (vzor TrainingPeaks: 5 smajlíků + RPE 0-10) */
+const FEEL = { 1: ["😫", "Velmi slabý"], 2: ["😕", "Slabý"], 3: ["😐", "Normální"], 4: ["🙂", "Silný"], 5: ["😄", "Velmi silný"] };
+
+/* Compliance dle TrainingPeaks pravidel (plán vs. realita, primárně trvání):
+   ±20 % zelená · 50-79 / 121-150 % žlutá · mimo ±50 % oranžová · nesplněno červená */
+function parseMin(s) {
+    if (!s) return 0;
+    let m = s.match(/(\d+):(\d+):(\d+)/); if (m) return +m[1] * 60 + +m[2] + +m[3] / 60;
+    m = s.match(/(\d+):(\d+)/); if (m) return +m[1] * 60 + +m[2];
+    m = s.match(/(\d+)\s*min/); if (m) return +m[1];
+    return 0;
+}
+function complianceOf(x) {
+    if (x.type === "rest") return null;
+    if (x.status === "skipped") return "red";
+    if (x.status !== "done") return "pending";
+    const plan = parseMin(x.dur);
+    const real = x.actual ? parseMin(x.actual.time) : plan; // bez dat = splněno dle plánu
+    if (!plan || !real) return "green";
+    const pct = 100 * real / plan;
+    if (pct >= 80 && pct <= 120) return "green";
+    if ((pct >= 50 && pct < 80) || (pct > 120 && pct <= 150)) return "yellow";
+    return "orange";
+}
+const commentCount = x => (x.comments || []).length;
+const unreadOf = a => a.week.reduce((s, x) => s + (x.comments || []).filter(c => c.unread).length, 0);
+
+/* Feed poslední aktivity napříč atlety (vzor TP Home View) */
+function activityFeed() {
+    const items = [];
+    ATHLETES.forEach(a => a.week.forEach((x, i) => {
+        (x.comments || []).forEach(c => { if (c.who === "a") items.push({ a, x, i, c }); });
+    }));
+    return items.sort((p, q) => (q.c.unread ? 1 : 0) - (p.c.unread ? 1 : 0));
+}
+
 /* ---------- views ---------- */
 let view = "coach";
 let detailId = null;
@@ -424,34 +600,75 @@ function render() {
     else app.innerHTML = athleteHTML();
 }
 
+function dotsHTML(a) {
+    return `<div class="dots">${a.week.map(x => {
+        const c = complianceOf(x);
+        return c === null ? `<span class="dot rest"></span>` : `<span class="dot ${c}" title="${fmtDate(x.date)} ${x.title}"></span>`;
+    }).join("")}</div>`;
+}
+
 function coachHTML() {
-    const totalDone = ATHLETES.reduce((s,a) => s + doneCount(a), 0);
     const avgComp = Math.round(ATHLETES.reduce((s,a) => s + compliance(a), 0) / ATHLETES.length);
     const redFlags = ATHLETES.reduce((s,a) => s + flagsFor(a).filter(f => f[0] === 'red').length, 0);
+    const unread = ATHLETES.reduce((s,a) => s + unreadOf(a), 0);
+    const feed = activityFeed();
     return `
     <div class="kpi-grid">
         <div class="kpi"><div class="num">${ATHLETES.length}</div><div class="lbl">aktivních atletů</div></div>
         <div class="kpi ${avgComp >= 80 ? 'ok' : ''}"><div class="num">${avgComp} %</div><div class="lbl">compliance tento týden</div></div>
-        <div class="kpi"><div class="num">${totalDone}</div><div class="lbl">splněných tréninků</div></div>
+        <div class="kpi ${unread ? 'warn' : 'ok'}"><div class="num">${unread}</div><div class="lbl">nepřečtené reakce</div></div>
         <div class="kpi ${redFlags ? 'warn' : 'ok'}"><div class="num">${redFlags}</div><div class="lbl">red flags k řešení</div></div>
     </div>
-    <h2>Atleti <span class="sub">týden 29. 6. – 5. 7. · klikni pro detail</span></h2>
-    <div class="roster">
-        ${ATHLETES.map(a => `
-        <div class="athlete-row" onclick="openAthlete(${a.id})">
-            <div class="a-name">${a.name}<small>${a.tag}</small></div>
-            <div class="a-week"><b>${doneCount(a)}</b> / ${nonRest(a).length} tréninků
-                <div class="bar"><i style="width:${compliance(a)}%; background:${compliance(a) >= 80 ? 'var(--green)' : compliance(a) >= 50 ? 'var(--orange)' : 'var(--red)'}"></i></div>
+    <div class="coach-cols">
+        <div>
+            <h2>Atleti <span class="sub">týden 29. 6. – 5. 7.</span></h2>
+            <div class="roster">
+                ${ATHLETES.map(a => `
+                <div class="athlete-row" onclick="openAthlete(${a.id})">
+                    <div class="a-name">${a.name}<small>${a.tag}</small></div>
+                    <div class="a-week"><b>${doneCount(a)}</b> / ${nonRest(a).length} tréninků
+                        ${dotsHTML(a)}
+                    </div>
+                    <div class="a-week">Sync: <b>${a.lastSync}</b>${unreadOf(a) ? `<br><span class="cbadge">💬 ${unreadOf(a)} new</span>` : ""}</div>
+                    <div class="flags">${flagsFor(a).map(f => `<span class="flag ${f[0]}">${f[1]}</span>`).join("")}</div>
+                </div>`).join("")}
             </div>
-            <div class="a-week">Poslední sync: <b>${a.lastSync}</b></div>
-            <div class="flags">${flagsFor(a).map(f => `<span class="flag ${f[0]}">${f[1]}</span>`).join("")}</div>
-        </div>`).join("")}
+        </div>
+        <div>
+            <h2>Reakce atletů <span class="sub">poslední</span></h2>
+            <div class="feed">
+                ${feed.map(f => `
+                <div class="feed-item ${f.c.unread ? 'unread' : ''}" onclick="detailId=${f.a.id};render();openWorkout(${f.a.id},${f.i})">
+                    <div class="avatar">${f.a.name.split(" ").map(n => n[0]).join("")}</div>
+                    <div>
+                        <div class="fi-text">${f.c.text}</div>
+                        <div class="fi-meta">${f.a.name} · ${f.x.title} · ${f.c.time}${f.x.rpe ? ` · RPE ${f.x.rpe}` : ""}${f.x.feel ? ` · ${FEEL[f.x.feel][0]}` : ""}</div>
+                    </div>
+                </div>`).join("")}
+            </div>
+        </div>
     </div>
     <div class="footer-note">Demo s mock daty · V produkci: aktivity se párují automaticky z Garmin Connect API, tréninky se odesílají do zařízení atletů přes Garmin Training API.</div>`;
 }
 
+function wellnessHTML(wl, forCoach) {
+    if (!wl) return `<div class="wellness"><div class="wcell"><b style="color:var(--muted);font-size:0.9rem">žádná data</b><span>ranní wellness — atlet nesynchronizuje</span></div></div>`;
+    return `
+    <div class="wellness">
+        <div class="wcell ${wl.readiness < 70 ? 'low' : ''}"><b>${wl.readiness}</b><span>readiness</span></div>
+        <div class="wcell"><b>${wl.sleep}</b><span>spánek</span></div>
+        <div class="wcell ${wl.hrv < 42 ? 'low' : ''}"><b>${wl.hrv}</b><span>HRV</span></div>
+        <div class="wcell"><b>${wl.rhr}</b><span>klidový tep</span></div>
+        ${forCoach ? "" : `<div class="wcell" style="flex:1.4"><b style="font-size:0.9rem">Vše sedí?</b><span>uprav jedním klepnutím</span></div>`}
+    </div>`;
+}
+
 function coachDetailHTML(id) {
     const a = ATHLETES.find(x => x.id === id);
+    const planned = nonRest(a).reduce((s, x) => s + parseMin(x.dur), 0);
+    const done = a.week.filter(x => x.status === "done").reduce((s, x) => s + parseMin(x.actual ? x.actual.time : x.dur), 0);
+    const maxLoad = Math.max(...a.weeklyLoad, 1);
+    const fmtH = m => Math.floor(m / 60) + ":" + String(Math.round(m % 60)).padStart(2, "0");
     return `
     <button class="back" onclick="detailId=null;render()">← Zpět na přehled</button>
     <div class="athlete-head">
@@ -459,6 +676,13 @@ function coachDetailHTML(id) {
         <span class="meta">${a.tag} · HRmax ${a.hrMax} · sync: ${a.lastSync}</span>
     </div>
     <div class="flags" style="justify-content:flex-start; margin-top:6px">${flagsFor(a).map(f => `<span class="flag ${f[0]}">${f[1]}</span>`).join("")}</div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:stretch">
+        <div>${wellnessHTML(a.wellness, true)}</div>
+        <div style="margin-top:16px">
+            <div class="loadbars">${a.weeklyLoad.map((h, i) => `<i class="${i === a.weeklyLoad.length - 1 ? 'cur' : ''}" style="height:${Math.max(8, 100 * h / maxLoad)}%" title="${h} h"></i>`).join("")}</div>
+            <div class="load-lbl"><span>W-3</span><span>W-2</span><span>W-1</span><span>teď</span></div>
+        </div>
+    </div>
     <div class="week-grid">
         ${a.week.map((x, i) => `
         <div class="day-col ${x.date === TODAY ? 'today' : ''}">
@@ -466,6 +690,8 @@ function coachDetailHTML(id) {
             ${workoutCardHTML(x, a.id, i)}
         </div>`).join("")}
     </div>
+    <div style="margin-top:10px;color:var(--muted);font-size:0.8rem">Tento týden: <b style="color:var(--text)">${fmtH(done)}</b> / ${fmtH(planned)} h dle plánu</div>
+    ${a.privateNote ? `<div class="private-note"><div class="pn-lbl">🔒 Soukromá poznámka trenéra — atlet nevidí</div>${a.privateNote}</div>` : ""}
     <div style="margin-top:20px">
         <button class="garmin-btn" onclick="toast('Týden odeslán do Garmin Connect kalendářů (demo)')">⌚ Odeslat celý týden do Garminu</button>
         <button class="garmin-btn secondary" onclick="toast('V produkci: kopie minulého týdne / šablony bloků')">⧉ Naplánovat další týden</button>
@@ -479,8 +705,29 @@ function workoutCardHTML(x, aid, idx) {
         <div class="wtitle">${x.title}</div>
         <div class="wdur">${x.dur}${x.actual ? " · " + x.actual.km + " km" : ""}</div>
         ${x.steps.length ? profileHTML(x.steps) : `<div class="zbadges">${x.zones.map(z => `<span class="z ${z}">${z.toUpperCase()}</span>`).join("")}</div>`}
-        <div class="wstatus ${x.status}">${STATUS_LBL[x.status]}</div>
+        <div class="wstatus ${x.status}">${STATUS_LBL[x.status]}${x.feel ? " " + FEEL[x.feel][0] : ""}${commentCount(x) ? ` <span class="cbadge">💬${commentCount(x)}</span>` : ""}</div>
     </div>`;
+}
+
+let fbFeel = null, fbRpe = 5;
+function setFeel(v) {
+    fbFeel = v;
+    document.querySelectorAll(".feel-btn").forEach((b, i) => b.classList.toggle("sel", i + 1 === v));
+}
+function setRpe(v) {
+    fbRpe = +v;
+    document.getElementById("rpeVal").textContent = v + "/10";
+}
+function submitFeedback(idx) {
+    const a = ATHLETES[0];
+    const x = a.week[idx];
+    x.feel = fbFeel || 3;
+    x.rpe = fbRpe;
+    const text = document.getElementById("fbNote").value.trim();
+    if (text) x.comments.push({ who: "a", text, time: "právě teď", unread: true });
+    fbFeel = null; fbRpe = 5;
+    toast("Díky! Karel uvidí tvoji zpětnou vazbu.");
+    render();
 }
 
 function athleteHTML() {
@@ -488,8 +735,29 @@ function athleteHTML() {
     const today = a.week.find(x => x.date === TODAY);
     const upcoming = a.week.filter(x => x.date > TODAY);
     const results = a.week.filter(x => x.actual);
+    const fbIdx = a.week.findIndex(x => x.status === "done" && x.actual && !x.feel && !x.rpe);
+    const fb = fbIdx >= 0 ? a.week[fbIdx] : null;
     return `
-    <div class="hero">
+    ${wellnessHTML(a.wellness, false)}
+    ${fb ? `
+    <div class="hero" style="margin-top:22px">
+        <div class="eyebrow">Zpětná vazba · ${fmtDate(fb.date)}</div>
+        <h3 style="font-size:1.3rem">${fb.title} — jak to šlo?</h3>
+        <div class="fbform" style="border-top:0;padding-top:0;margin-top:10px">
+            <div class="chat-title">Jak ses cítil?</div>
+            <div class="feel-row">
+                ${[1,2,3,4,5].map(v => `<button class="feel-btn" onclick="setFeel(${v})">${FEEL[v][0]}<small>${FEEL[v][1]}</small></button>`).join("")}
+            </div>
+            <div class="chat-title">Jak náročné to bylo? (RPE)</div>
+            <div class="rpe-row">
+                <input type="range" min="1" max="10" value="5" oninput="setRpe(this.value)">
+                <span class="rpe-val" id="rpeVal">5/10</span>
+            </div>
+            <textarea id="fbNote" class="chat-input" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:0.85rem;padding:9px 12px;resize:none" rows="2" placeholder="Poznámka pro trenéra (nepovinné)…"></textarea>
+            <button class="garmin-btn" style="margin-top:12px" onclick="submitFeedback(${fbIdx})">Odeslat zpětnou vazbu</button>
+        </div>
+    </div>` : ""}
+    <div class="hero" style="margin-top:22px">
         <div class="eyebrow">Dnes · pátek 3. 7.</div>
         <h3>${today.title} · ${today.dur}</h3>
         <div class="desc">${today.desc}</div>
@@ -510,14 +778,14 @@ function athleteHTML() {
     </div>
     <h2 style="margin-top:26px">Moje výsledky <span class="sub">automaticky z Garminu</span></h2>
     ${results.map(x => `
-    <div class="result-row">
-        <div class="r-name">${x.title}<small>${fmtDate(x.date)} · ${x.actual.time}</small></div>
+    <div class="result-row" style="cursor:pointer" onclick="openWorkout(${a.id},${a.week.indexOf(x)})">
+        <div class="r-name">${x.title}${x.feel ? " " + FEEL[x.feel][0] : ""}<small>${fmtDate(x.date)} · ${x.actual.time}${x.rpe ? ` · RPE ${x.rpe}` : ""}${commentCount(x) ? ` · 💬${commentCount(x)}` : ""}</small></div>
         <div class="r-metric"><b>${x.actual.km} km</b>vzdálenost</div>
         <div class="r-metric"><b>${x.actual.avgHr}</b>avg HR</div>
         <div class="r-metric"><b>${x.actual.elev} m</b>převýšení</div>
         <div class="r-metric"><b>${x.actual.te}</b>Training Effect</div>
     </div>`).join("")}
-    <div class="footer-note">Žádné screenshoty. Dojedeš, Garmin se synchronizuje, trenér vidí výsledek.</div>`;
+    <div class="footer-note">Žádné screenshoty. Dojedeš, Garmin se synchronizuje, trenér vidí výsledek i tvoji zpětnou vazbu.</div>`;
 }
 
 /* ---------- modal ---------- */
@@ -548,10 +816,36 @@ function openWorkout(aid, idx) {
             <div><b>${x.actual.te}</b><span>Training Effect</span></div>
         </div>
     </div>` : x.status !== "done" && x.type === "bike" ? `
-    <button class="garmin-btn" style="margin-top:16px" onclick="toast('Strukturovaný trénink odeslán do Garmin Connect (demo)')">⌚ Odeslat do Garminu</button>` : ""}`;
+    <button class="garmin-btn" style="margin-top:16px" onclick="toast('Strukturovaný trénink odeslán do Garmin Connect (demo)')">⌚ Odeslat do Garminu</button>` : ""}
+    ${x.status === "done" && (x.feel || x.rpe) ? `
+    <div class="fb-chips">
+        ${x.feel ? `<span class="fb-chip">${FEEL[x.feel][0]} Pocit: <b>${FEEL[x.feel][1]}</b></span>` : ""}
+        ${x.rpe ? `<span class="fb-chip">RPE <b>${x.rpe}/10</b></span>` : ""}
+    </div>` : ""}
+    <div class="chat">
+        <div class="chat-title">Poznámky k tréninku</div>
+        ${(x.comments || []).map(c => `
+        <div class="bubble ${c.who}">${c.text}<div class="b-meta">${c.who === "c" ? "Karel (trenér)" : a.name.split(" ")[0]} · ${c.time}</div></div>`).join("")
+        || `<div style="color:var(--muted);font-size:0.8rem">Zatím žádné poznámky.</div>`}
+        <div class="chat-input">
+            <textarea id="chatText" rows="1" placeholder="${view === 'coach' ? 'Napiš atletovi…' : 'Napiš trenérovi…'}"></textarea>
+            <button onclick="sendComment(${aid},${idx})">Odeslat</button>
+        </div>
+    </div>`;
+    (x.comments || []).forEach(c => delete c.unread);
     document.getElementById("overlay").classList.add("open");
 }
-function closeModal() { document.getElementById("overlay").classList.remove("open"); }
+
+function sendComment(aid, idx) {
+    const el = document.getElementById("chatText");
+    const text = el.value.trim();
+    if (!text) return;
+    const a = ATHLETES.find(x => x.id === aid);
+    a.week[idx].comments.push({ who: view === "coach" ? "c" : "a", text, time: "právě teď" });
+    openWorkout(aid, idx);
+    toast(view === "coach" ? "Odesláno atletovi — dostane notifikaci" : "Odesláno trenérovi");
+}
+function closeModal() { document.getElementById("overlay").classList.remove("open"); render(); }
 
 /* ---------- toast + brand init ---------- */
 let toastTimer;
