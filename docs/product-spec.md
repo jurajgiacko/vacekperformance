@@ -30,6 +30,13 @@ Existujúce nástroje (TrainingPeaks) sú drahé per-athlete, zložité pre hobb
 5. **Atlét view:** dnešný tréning + týždeň dopredu, výsledky (km, čas, HR, zóny), jednoduchý trend.
 6. **White-label branding:** logo, farby, subdoména/vlastná doména per tenant. Konfigurácia, nie fork.
 7. **Manuálne typy tréningov** (beh, sila, mobilita) — bez device syncu, len check-off + poznámka.
+8. **Feedback slučka** (vzory overené z konkurencie, viď demo):
+   - poznámky/chat priamo na tréningu (flat log, vzor TP post-activity comments / Final Surge Quick Comment),
+   - post-workout survey atléta: feel 1–5 smajlíky + RPE 1–10 + voliteľná poznámka (vzor TP/TrainerRoad),
+   - compliance farby podľa TP pravidiel (±20 % zelená, 50–79/121–150 % žltá, mimo ±50 % oranžová, vynechaný červená),
+   - coach dashboard: compliance dots per deň, feed nepřečtených reakcií (unread inbox),
+   - denný wellness check-in (readiness, spánok, HRV, RHR — sync z Garmin/Oura; vzor intervals.icu, JOIN „pre-fill & correct"),
+   - súkromné poznámky trénera (atlét nevidí) vs. zdieľané poznámky (vzor TP Private Notes).
 
 ### Out (zámerne, fáza 2+)
 - Strava (právne/cenovo riziková), Apple HealthKit (vyžaduje natívnu iOS appku), Wahoo/Polar.
